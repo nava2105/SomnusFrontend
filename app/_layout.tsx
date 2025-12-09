@@ -3,57 +3,90 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useColorScheme } from '@/components/useColorScheme';
 
 export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
+    ErrorBoundary,
 } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+    initialRouteName: '(tabs)',
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    ...FontAwesome.font,
-  });
+    const [loaded, error] = useFonts({
+        SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+        ...FontAwesome.font,
+    });
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
+    const [showOnboarding, setShowOnboarding] = useState(true);
+    const [isChecking, setIsChecking] = useState(true);
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    useEffect(() => {
+        if (error) throw error;
+    }, [error]);
+
+    useEffect(() => {
+        if (loaded) {
+            SplashScreen.hideAsync();
+        }
+    }, [loaded]);
+
+    // Verificar si el usuario ya vio el onboarding
+    useEffect(() => {
+        const checkOnboardingStatus = async () => {
+            try {
+                const hasSeenOnboarding = await AsyncStorage.getItem('hasSeenOnboarding');
+                setShowOnboarding(!hasSeenOnboarding);
+            } catch (e) {
+                console.error('Error checking onboarding:', e);
+                setShowOnboarding(false);
+            } finally {
+                setIsChecking(false);
+            }
+        };
+
+        if (loaded) {
+            checkOnboardingStatus();
+        }
+    }, [loaded]);
+
+    // Mostrar splash mientras carga
+    if (!loaded || isChecking) {
+        return null;
     }
-  }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
-
-  return <RootLayoutNav />;
+    // Renderizar stack de onboarding o stack principal
+    return showOnboarding ? <OnboardingLayout /> : <MainLayout />;
 }
 
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+function OnboardingLayout() {
+    const colorScheme = useColorScheme();
 
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
-  );
+    return (
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="onboarding" />
+            </Stack>
+        </ThemeProvider>
+    );
+}
+
+function MainLayout() {
+    const colorScheme = useColorScheme();
+
+    return (
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+            </Stack>
+        </ThemeProvider>
+    );
 }
