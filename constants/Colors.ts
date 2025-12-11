@@ -1,24 +1,30 @@
+/**
+ * Centralized color palette for Somnus app
+ * Supports light and dark themes with semantic naming
+ */
+
 const tintColorLight = '#2f95dc';
 const tintColorDark = '#10B981';
 
 export default {
     light: {
-        text: '#000',
+        text: '#000000',
         secondaryText: '#565656',
-        background: '#fff',
+        background: '#ffffff',
         tint: tintColorLight,
-        tabIconDefault: '#ccc',
+        tabIconDefault: '#cccccc',
         tabIconSelected: tintColorLight,
     },
     dark: {
-        text: '#fff',
+        text: '#ffffff',
         secondaryText: '#7D7D7D',
         background: '#0F172A',
         tint: tintColorDark,
-        tabIconDefault: '#ccc',
+        tabIconDefault: '#cccccc',
         tabIconSelected: tintColorDark,
     },
-    awakeColor : '#FF8D28',
-    pickupColor : '#FF383C',
-    asleepColor : '#34C759',
-};
+    // Semantic colors for sleep states
+    awakeColor: '#FF8D28',
+    pickupColor: '#FF383C',
+    asleepColor: '#34C759',
+} as const;

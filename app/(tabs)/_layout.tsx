@@ -1,3 +1,7 @@
+/**
+ * Tab navigation layout configuration
+ */
+
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';

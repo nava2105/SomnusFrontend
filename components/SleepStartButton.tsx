@@ -1,3 +1,7 @@
+/**
+ * Play button with bed icon for starting sleep tracking
+ */
+
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';

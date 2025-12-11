@@ -1,35 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet } from 'react-native';
+/**
+ * Modal screen for monthly sleep graph history
+ */
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+
+import { StatusBar } from 'expo-status-bar';
+import { Platform } from 'react-native';
+import BaseInfoScreen from '@/components/BaseInfoScreen';
 
 export default function ModalScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Modal</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/modal_monthly_graph.tsx" />
-
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-    </View>
-  );
+    return (
+        <>
+            <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+            <BaseInfoScreen title="Monthly Graph" path="app/modal_monthly_graph.tsx" />
+        </>
+    );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});

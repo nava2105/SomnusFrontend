@@ -1,10 +1,13 @@
+/**
+ * Body-level action link with icon
+ */
+
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Text } from '@/components/Themed';
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
+import { useTheme } from '@/hooks/useTheme';
 
 interface BodyActionLinkProps {
     href: string;
@@ -19,18 +22,15 @@ export default function BodyActionLink({
                                            iconName,
                                            position = 'right'
                                        }: BodyActionLinkProps) {
-    const colorScheme = useColorScheme();
-    const theme = Colors[colorScheme ?? 'light'];
+    const { colors } = useTheme();
     const router = useRouter();
 
     const handlePress = () => {
         console.log('Navegando a:', href);
-        // @ts-ignore
-        router.push(href);
+        router.push(href as any);
     };
 
     return (
-
         <View style={[
             styles.wrapper,
             position === 'left' ? styles.leftAlign : styles.rightAlign
@@ -42,13 +42,13 @@ export default function BodyActionLink({
                     { opacity: pressed ? 0.5 : 1 }
                 ]}
             >
-                <Text style={[styles.text, { color: theme.secondaryText }]}>
+                <Text style={[styles.text, { color: colors.secondaryText }]}>
                     {label}
                 </Text>
                 <FontAwesome
                     name={iconName}
                     size={22}
-                    color={theme.secondaryText}
+                    color={colors.secondaryText}
                 />
             </Pressable>
         </View>

@@ -1,3 +1,7 @@
+/**
+ * Skip link for onboarding flow
+ */
+
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useColorScheme } from '@/components/useColorScheme';
 import Colors from "@/constants/Colors";

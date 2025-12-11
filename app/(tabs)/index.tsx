@@ -1,3 +1,7 @@
+/**
+ * Main home screen displaying sleep score and weekly overview
+ */
+
 import { StyleSheet } from 'react-native';
 import { View } from '@/components/Themed';
 import ArcChart from "@/components/ArcChart";
@@ -47,7 +51,6 @@ export default function TabOneScreen() {
                     label="Night Score"
                     size={50}
                     color={Colors[colorScheme ?? 'light'].secondaryText}
-                    style={{ position: 'absolute' }}
                 />
             </View>
             <IconTextRow

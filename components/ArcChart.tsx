@@ -1,19 +1,18 @@
+/**
+ * Arc chart for displaying sleep phase distribution
+ * Uses SVG paths to create donut/pie segments
+ */
+
 import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { useColorScheme } from '@/components/useColorScheme';
+import { ChartSection } from '@/types';
 
 const { width } = Dimensions.get('window');
 const DEFAULT_SIZE = Math.min(width - 100, 280);
 
-interface Section {
-    value: number;
-    color: string;
-    label?: string;
-}
-
 interface ArcChartProps {
-    sections: Section[];
+    sections: ChartSection[];
     size?: number;
     strokeWidth?: number;
     holeSize?: number;

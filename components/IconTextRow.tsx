@@ -1,40 +1,27 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+/**
+ * Row with icon and text for displaying sleep metrics
+ */
+
+import { View, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-// @ts-ignore
-import type { FontAwesomeGlyphs } from '@expo/vector-icons/build/FontAwesome';
-import { useColorScheme } from '@/components/useColorScheme';
+import { Text } from '@/components/Themed';
+import { useTheme } from '@/hooks/useTheme';
 import Colors from '@/constants/Colors';
 
-interface IconTextRowProps {
-    iconName: FontAwesomeGlyphs;
+interface Props {
+    iconName: React.ComponentProps<typeof FontAwesome>['name'];
     text: string;
     color?: string;
-    style?: object;
 }
 
-export default function IconTextRow({
-                                        iconName,
-                                        text,
-                                        color,
-                                        style,
-                                    }: IconTextRowProps) {
-    const colorScheme = useColorScheme();
-    const isDark = colorScheme === 'dark';
-
-    const iconColor = color || (isDark ? Colors.dark.tint : Colors.light.tint);
+export default function IconTextRow({ iconName, text, color }: Props) {
+    const { isDark } = useTheme();
+    const iconColor = color ?? (isDark ? Colors.dark.tint : Colors.light.tint);
 
     return (
-        <View style={[styles.container, style]}>
-            <FontAwesome
-                name={iconName}
-                size={20}
-                color={iconColor}
-                style={styles.icon}
-            />
-            <Text style={[styles.text, { color: iconColor }]}>
-                {text}
-            </Text>
+        <View style={styles.container}>
+            <FontAwesome name={iconName} size={20} color={iconColor} style={styles.icon} />
+            <Text style={[styles.text, { color: iconColor }]}>{text}</Text>
         </View>
     );
 }

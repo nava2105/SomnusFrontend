@@ -1,27 +1,30 @@
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { useColorScheme } from '@/components/useColorScheme';
-import Colors from "@/constants/Colors";
+/**
+ * Theme-aware button with consistent styling
+ */
 
-interface ThemedButtonProps {
+import { TouchableOpacity, StyleSheet, TouchableOpacityProps } from 'react-native';
+import { useTheme } from '@/hooks/useTheme';
+import { Text as ThemedText } from './Themed';
+
+interface Props extends TouchableOpacityProps {
     title: string;
-    onPress: () => void;
-    style?: object;
 }
 
-export function ThemedButton({ title, onPress, style }: ThemedButtonProps) {
-    const colorScheme = useColorScheme();
-    const isDark = colorScheme === 'dark';
+export function ThemedButton({ title, style, ...touchableProps }: Props) {
+    const { colors, isDark } = useTheme();
 
     return (
         <TouchableOpacity
             style={[
                 styles.button,
-                { backgroundColor: isDark ? Colors.dark.tint : Colors.light.tint },
-                style
+                { backgroundColor: colors.tint },
+                style,
             ]}
-            onPress={onPress}
+            {...touchableProps}
         >
-            <Text style={styles.buttonText}>{title}</Text>
+            <ThemedText style={[styles.text, { color: isDark ? colors.text : colors.background }]}>
+                {title}
+            </ThemedText>
         </TouchableOpacity>
     );
 }
@@ -32,8 +35,7 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         borderRadius: 8,
     },
-    buttonText: {
-        color: Colors.dark.text,
+    text: {
         fontSize: 18,
         fontWeight: '600',
     },

@@ -1,41 +1,34 @@
-import React from 'react';
+/**
+ * Header right-side link with icon for navigation bar
+ */
+
 import { Pressable, StyleSheet } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, Href } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Text } from '@/components/Themed';
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
+import { useTheme } from '@/hooks/useTheme';
 
-interface HeaderRightLinkProps {
-    href: string;
+interface Props {
+    href: Href<string>;
     label: string;
     iconName: React.ComponentProps<typeof FontAwesome>['name'];
 }
 
-export default function HeaderRightLink({ href, label, iconName }: HeaderRightLinkProps) {
-    const colorScheme = useColorScheme();
-    const theme = Colors[colorScheme ?? 'light'];
+export default function HeaderRightLink({ href, label, iconName }: Props) {
+    const { colors } = useTheme();
 
     return (
-        // @ts-ignore
         <Link href={href} asChild>
             <Pressable style={styles.container}>
                 {({ pressed }) => (
                     <>
-                        <Text
-                            style={[
-                                styles.text,
-                                {
-                                    color: theme.text,
-                                    opacity: pressed ? 0.5 : 1,
-                                },
-                            ]}>
+                        <Text style={[styles.text, { color: colors.text, opacity: pressed ? 0.5 : 1 }]}>
                             {label}
                         </Text>
                         <FontAwesome
                             name={iconName}
                             size={25}
-                            color={theme.text}
+                            color={colors.text}
                             style={[styles.icon, { opacity: pressed ? 0.5 : 1 }]}
                         />
                     </>
