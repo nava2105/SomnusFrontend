@@ -1,44 +1,42 @@
-import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useColorScheme } from '@/components/useColorScheme';
+import { ThemedButton } from '@/components/ThemedButton';
+import { ThemedLogo } from '@/components/ThemedLogo';
+import { SkipLink } from '@/components/SkipLink';
 
 export default function OnboardingScreen() {
-    const colorScheme = useColorScheme();
-    const isDark = colorScheme === 'dark';
-
     const completeOnboarding = async () => {
         await AsyncStorage.setItem('hasSeenOnboarding', 'true');
         router.replace('/');
     };
 
+    const skipOnboarding = async () => {
+        router.replace('/');
+    };
+
     return (
         <View style={styles.container}>
-            <Image
-                source={
-                    isDark
-                        ? require('../assets/images/logo/logo_dark.png')
-                        : require('../assets/images/logo/logo_light.png')
-                }
+            <ThemedLogo
+                lightSource={require('../assets/images/logo/logo_light.png')}
+                darkSource={require('../assets/images/logo/logo_dark.png')}
                 style={styles.logo}
-                resizeMode="contain"
             />
 
             <Text style={styles.subtitle}>Welcome to</Text>
             <Text style={styles.title}>SOMNUS</Text>
 
-            <TouchableOpacity
-                style={[styles.button, { backgroundColor: isDark ? '#10B981' : '#2f95dc' }]}
+            <ThemedButton
+                title="Sign in or create an account"
                 onPress={completeOnboarding}
-            >
-                <Text style={styles.buttonText}>Sign in or create an account</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                onPress={completeOnboarding}
-            >
-                <Text style={[styles.buttonText, { color: isDark ? '#565656' : '#2f95dc'}]}>Skip this step</Text>
-            </TouchableOpacity>
+            />
+
+            <SkipLink
+                title="Skip this step"
+                onPress={skipOnboarding}
+                style={styles.skipLink}
+            />
         </View>
     );
 }
@@ -52,7 +50,7 @@ const styles = StyleSheet.create({
     },
     logo: {
         width: 200,
-        height: 200, // Ajusta según tus necesidades
+        height: 200,
         marginBottom: 30,
     },
     title: {
@@ -65,14 +63,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         textAlign: 'center',
     },
-    button: {
-        paddingHorizontal: 30,
-        paddingVertical: 15,
-        borderRadius: 8,
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: '600',
+    skipLink: {
+        marginTop: 30,
     },
 });
