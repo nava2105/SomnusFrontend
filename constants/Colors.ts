@@ -14,6 +14,7 @@ export default {
         tint: tintColorLight,
         tabIconDefault: '#cccccc',
         tabIconSelected: tintColorLight,
+        cardBackground: '#D5D5D5',
     },
     dark: {
         text: '#ffffff',
@@ -22,6 +23,7 @@ export default {
         tint: tintColorDark,
         tabIconDefault: '#cccccc',
         tabIconSelected: tintColorDark,
+        cardBackground: '#1D192B',
     },
     // Semantic colors for sleep states
     awakeColor: '#FF8D28',

@@ -9,6 +9,7 @@ import { Text } from '@/components/Themed';
 import { useTheme } from '@/hooks/useTheme';
 
 interface Props {
+    // @ts-ignore
     href: Href<string>;
     label: string;
     iconName: React.ComponentProps<typeof FontAwesome>['name'];
@@ -18,6 +19,7 @@ export default function HeaderRightLink({ href, label, iconName }: Props) {
     const { colors } = useTheme();
 
     return (
+        // @ts-ignore
         <Link href={href} asChild>
             <Pressable style={styles.container}>
                 {({ pressed }) => (

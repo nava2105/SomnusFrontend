@@ -13,6 +13,7 @@ import {useColorScheme} from "@/components/useColorScheme";
 import BodyActionLink from "@/components/BodyActionLink";
 import SleepStartButton from '@/components/SleepStartButton';
 import BarChart from "@/components/BarChart";
+import HeaderText from '@/components/HeaderText';
 import { router } from 'expo-router';
 
 const weeklyData = [
@@ -29,10 +30,11 @@ export default function TabOneScreen() {
     const colorScheme = useColorScheme();
     return (
         <View style={styles.container}>
+            <HeaderText text={"Home"} />
             <BodyActionLink
-                href="/modal_recommendations"
+                href="/recommendations"
                 label="Recommendations"
-                iconName="angle-right"
+                iconName="list"
                 position="right"
             />
             <View style={styles.chartContainer}>
@@ -79,7 +81,7 @@ export default function TabOneScreen() {
             <BodyActionLink
                 href="/modal_recommendations"
                 label="Edit bedtime"
-                iconName="angle-right"
+                iconName="clock-o"
                 position="left"
             />
             <BarChart

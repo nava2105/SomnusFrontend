@@ -21,3 +21,14 @@ export interface ChartSection {
     /** Optional descriptive label */
     label?: string;
 }
+
+export interface Recommendation {
+    /** Unique identifier */
+    id: string;
+    /** Title of the recommendation */
+    title: string;
+    /** Brief explanation shown by default */
+    briefExplanation: string;
+    /** Detailed explanation shown when "Why?" is expanded */
+    detailedExplanation: string;
+}

@@ -102,7 +102,7 @@ export default function BarChart({ data, height = 200 }: Props) {
                     x={x}
                     y={chartHeight - 10}
                     fontSize={12}
-                    fill={colors.text}
+                    fill={colors.secondaryText}
                     textAnchor="middle"
                     fontWeight="500"
                 >
