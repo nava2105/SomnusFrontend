@@ -85,6 +85,7 @@ function MainNavigator() {
             <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen name="modal_monthly_graph" options={{ presentation: 'modal' }} />
+                <Stack.Screen name="modal_change_hour" options={{ presentation: 'modal',  headerShown: false }} />
             </Stack>
         </ThemeProvider>
     );

@@ -73,13 +73,13 @@ export default function TabOneScreen() {
             />
             <View style={styles.separation}>
                 <SleepStartButton
-                    onPress={() => router.push('/modal_recommendations')}
+                    onPress={() => router.push('/modal_change_hour')}
                     size={50}
                     iconOffset={15}
                 />
             </View>
             <BodyActionLink
-                href="/modal_recommendations"
+                href="/modal_change_hour"
                 label="Edit bedtime"
                 iconName="clock-o"
                 position="left"

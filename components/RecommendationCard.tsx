@@ -1,5 +1,5 @@
 /**
- * Individual recommendation card with expandable "Why?" section
+ * Individual recommendation card with expandable "Why?" section and pin/favorite feature
  */
 
 import React, { useState } from 'react';
@@ -15,17 +15,45 @@ interface Props {
 
 export default function RecommendationCard({ recommendation }: Props) {
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isPinned, setIsPinned] = useState(false);
     const { colors } = useTheme();
 
     const toggleExpanded = () => {
         setIsExpanded(!isExpanded);
     };
 
+    const togglePinned = () => {
+        const newPinnedState = !isPinned;
+        setIsPinned(newPinnedState);
+
+        // Log to console when a recommendation is pinned/unpinned
+        console.log(`[Recommendation ${recommendation.id}] "${recommendation.title}" - Pinned: ${newPinnedState}`);
+    };
+
     return (
         <View style={[styles.card, { backgroundColor: colors.cardBackground }]}>
-            <Text style={[styles.title, { color: colors.text }]}>
-                {recommendation.title}
-            </Text>
+            {/* Header with title and pin icon */}
+            <View style={styles.header}>
+                <Text style={[styles.title, { color: colors.text }]}>
+                    {recommendation.title}
+                </Text>
+
+                <Pressable
+                    onPress={togglePinned}
+                    style={({ pressed }) => [
+                        styles.pinButton,
+                        { opacity: pressed ? 0.5 : 1 }
+                    ]}
+                    accessibilityLabel={isPinned ? 'Unpin recommendation' : 'Pin recommendation'}
+                >
+                    <FontAwesome
+                        name="thumb-tack"
+                        size={20}
+                        color={isPinned ? colors.tint : colors.secondaryText}
+                        style={[styles.pinIcon, isPinned && styles.pinnedIcon]}
+                    />
+                </Pressable>
+            </View>
 
             <Text style={[styles.brief, { color: colors.secondaryText }]}>
                 {recommendation.briefExplanation}
@@ -62,11 +90,27 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         marginHorizontal: 16,
     },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: 8,
+    },
     title: {
         fontSize: 18,
         fontWeight: 'bold',
-        marginBottom: 8,
+        flex: 1,
+        marginRight: 10,
         lineHeight: 24,
+    },
+    pinButton: {
+        padding: 8,
+    },
+    pinIcon: {
+        transform: [{ rotate: '-45deg' }],
+    },
+    pinnedIcon: {
+        transform: [{ rotate: '0deg' }],
     },
     brief: {
         fontSize: 14,

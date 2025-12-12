@@ -11,10 +11,12 @@ import React from "react";
 export default function OnboardingScreen() {
     const completeOnboarding = async () => {
         await AsyncStorage.setItem('hasSeenOnboarding', 'true');
+        // @ts-ignore
         router.replace('/');
     };
 
     const skipOnboarding = async () => {
+        // @ts-ignore
         router.replace('/');
     };
 
