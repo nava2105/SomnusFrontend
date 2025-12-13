@@ -39,10 +39,7 @@ export default function TabLayout() {
                     options={{
                         title: 'Night graph',
                         tabBarIcon: ({ color }) => <TabBarIcon name="area-chart" color={color} />,
-                        headerTitleStyle: {
-                            fontSize: 22,
-                            fontWeight: 'bold',
-                        },
+                        headerShown: false,
                     }}
                 />
 
@@ -60,6 +57,10 @@ export default function TabLayout() {
                     options={{
                         title: 'Settings',
                         tabBarIcon: ({ color }) => <TabBarIcon name="cog" color={color} />,
+                        headerTitleStyle: {
+                            fontSize: 24,
+                            fontWeight: 'bold',
+                        },
                     }}
                 />
             </Tabs>

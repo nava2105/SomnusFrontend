@@ -13,6 +13,15 @@ export interface DayData {
     pickups: number;
 }
 
+export interface MonthlyDayData {
+    /** Date in YYYY-MM-DD format */
+    date: string;
+    /** Sleep score (0-100) */
+    score: number;
+    /** Day of month (1-31) */
+    day: number;
+}
+
 export interface ChartSection {
     /** Value/percentage for chart segment */
     value: number;

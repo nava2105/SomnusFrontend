@@ -10,10 +10,12 @@ import BodyActionLink from "@/components/BodyActionLink";
 import React from "react";
 import IconTextRow from "@/components/IconTextRow";
 import Colors from "@/constants/Colors";
+import HeaderText from "@/components/HeaderText";
 
 export default function TabThreeScreen() {
     return (
         <View style={styles.screenContainer}>
+            <HeaderText text={"Night graph"} />
             {/* This wrapper centers everything as a block */}
             <View style={styles.centeredBlock}>
                 <View style={styles.editTagsWrapper}>
@@ -51,7 +53,7 @@ export default function TabThreeScreen() {
                 <View style={styles.buttonRow}>
                     <View style={styles.buttonContainer}>
                         <BodyActionLink
-                            href="/modal_change_hour"
+                            href="/three/monthly_graph"
                             label="Monthly history"
                             iconName="calendar"
                             position="left"
