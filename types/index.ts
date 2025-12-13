@@ -32,3 +32,14 @@ export interface Recommendation {
     /** Detailed explanation shown when "Why?" is expanded */
     detailedExplanation: string;
 }
+
+export interface NightGraphPoint {
+    time: string; // Format: "HH:MM"
+    /** Sleep depth: 0=awake, 0.3=light, 0.7=deep, 1.0=very deep */
+    value: number;
+}
+
+export interface NightGraphEvent {
+    time: string; // Format: "HH:MM"
+    type: 'pickup' | 'wakeup';
+}

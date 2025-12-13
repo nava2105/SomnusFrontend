@@ -8,7 +8,6 @@ import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import TabBarIcon from '@/components/TabBarIcon';
-import HeaderRightLink from '@/components/HeaderRightLink';
 import {Platform} from "react-native";
 import {StatusBar} from "expo-status-bar";
 
@@ -40,13 +39,10 @@ export default function TabLayout() {
                     options={{
                         title: 'Night graph',
                         tabBarIcon: ({ color }) => <TabBarIcon name="area-chart" color={color} />,
-                        headerRight: () => (
-                            <HeaderRightLink
-                                href="/modal_monthly_graph"
-                                label="Monthly history"
-                                iconName="calendar"
-                            />
-                        ),
+                        headerTitleStyle: {
+                            fontSize: 22,
+                            fontWeight: 'bold',
+                        },
                     }}
                 />
 

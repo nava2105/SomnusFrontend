@@ -11,7 +11,7 @@ export default function HomeStackLayout() {
 
     return (
         <Stack>
-            {/* Pantalla principal sin header */}
+            {/* Principal screen without header */}
             <Stack.Screen
                 name="index"
                 options={{

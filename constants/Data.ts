@@ -3,7 +3,7 @@
  * Replace with actual API calls in production
  */
 
-import {ChartSection, DayData, Recommendation} from '@/types';
+import {ChartSection, DayData, NightGraphEvent, NightGraphPoint, Recommendation} from '@/types';
 import Colors from './Colors';
 
 export const weeklyData: DayData[] = [
@@ -41,4 +41,32 @@ export const recommendationsData: Recommendation[] = [
         briefExplanation: 'Keep your bedroom between 65-68°F (18-20°C) for optimal sleep.',
         detailedExplanation: 'Core body temperature naturally drops during sleep. A cooler room helps facilitate this process. Research indicates that temperatures between 65-68°F promote deeper sleep and reduce nighttime awakenings.'
     },
+];
+
+export const nightGraphData: NightGraphPoint[] = [
+    // Initial period - getting to sleep
+    { time: "22:00", value: 0 }, { time: "22:05", value: 0.1 }, { time: "22:10", value: 0.2 },
+    { time: "22:15", value: 0.4 }, { time: "22:20", value: 0.6 }, { time: "22:25", value: 0.8 },
+
+    // Deep sleep phase
+    { time: "22:30", value: 1.0 }, { time: "22:35", value: 1.0 }, { time: "22:40", value: 0.9 },
+    { time: "22:45", value: 0.95 }, { time: "22:50", value: 1.0 }, { time: "22:55", value: 1.0 },
+    { time: "23:00", value: 0.9 }, { time: "23:05", value: 1.0 }, { time: "23:10", value: 0.8 },
+
+    // REM/light sleep cycle
+    { time: "23:15", value: 0.6 }, { time: "23:20", value: 0.7 }, { time: "23:25", value: 0.9 },
+    { time: "23:30", value: 1.0 }, { time: "23:35", value: 0.95 }, { time: "23:40", value: 0.7 },
+    { time: "23:45", value: 0.4 }, { time: "23:50", value: 0.6 }, { time: "23:55", value: 0.8 },
+
+    // Continued through the night...
+    { time: "00:00", value: 1.0 }, { time: "00:30", value: 0.9 }, { time: "01:00", value: 1.0 },
+    { time: "01:30", value: 0.7 }, { time: "02:00", value: 0.8 }, { time: "02:30", value: 1.0 },
+    { time: "03:00", value: 0.9 }, { time: "03:30", value: 0.6 }, { time: "04:00", value: 0.7 },
+    { time: "04:30", value: 0.8 }, { time: "05:00", value: 0.9 }, { time: "05:30", value: 0.6 },
+    { time: "06:00", value: 0.4 }, { time: "06:30", value: 0.2 }, { time: "07:00", value: 0 },
+];
+
+export const nightGraphEvents: NightGraphEvent[] = [
+    { time: "03:55", type: "pickup" }, // Phone pickup at 3:55 AM
+    { time: "10:11", type: "wakeup" }, // Wake up at 10:11 AM (based on your Figma screenshot)
 ];
