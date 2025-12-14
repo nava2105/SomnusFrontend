@@ -40,7 +40,10 @@ export default function RootLayout() {
         const checkOnboardingStatus = async () => {
             try {
                 const hasSeenOnboarding = await AsyncStorage.getItem(ONBOARDING_KEY);
-                setShowOnboarding(!hasSeenOnboarding);
+                const setupComplete = await AsyncStorage.getItem('setupComplete');
+
+                // Show onboarding if never seen OR if setup not complete
+                setShowOnboarding(!hasSeenOnboarding || !setupComplete);
             } catch (error) {
                 console.error('Error checking onboarding status:', error);
                 setShowOnboarding(false);
@@ -70,6 +73,10 @@ function OnboardingNavigator() {
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
             <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="onboarding" />
+                <Stack.Screen name="setup_profile" /> {/* New screen */}
+                <Stack.Screen name="setup_time" />
+                <Stack.Screen name="setup_wakeup" />
+                <Stack.Screen name="setup_permissions" />
             </Stack>
         </ThemeProvider>
     );

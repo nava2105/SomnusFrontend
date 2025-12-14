@@ -52,3 +52,26 @@ export interface NightGraphEvent {
     time: string; // Format: "HH:MM"
     type: 'pickup' | 'wakeup';
 }
+
+export interface UserTimeSetting {
+    hour: number;
+    minute: number;
+    isPM: boolean;
+}
+
+export interface UserSettings {
+    bedtime: UserTimeSetting;
+    wakeUpTime: UserTimeSetting;
+    permissionsGranted: boolean;
+}
+
+export interface UserProfile {
+    /** Username chosen by user */
+    username: string;
+    /** Birth date in YYYY-MM-DD format */
+    birthDate: string;
+    /** Calculated age in years */
+    age: number;
+    /** Selected avatar image path */
+    avatar: string;
+}

@@ -1,21 +1,23 @@
-import {Platform, StyleSheet} from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedLogo } from '@/components/ThemedLogo';
 import { SkipLink } from '@/components/SkipLink';
-import {StatusBar} from "expo-status-bar";
-import React from "react";
+import { StatusBar } from 'expo-status-bar';
+import React from 'react';
 
 export default function OnboardingScreen() {
     const completeOnboarding = async () => {
         await AsyncStorage.setItem('hasSeenOnboarding', 'true');
-        // @ts-ignore
-        router.replace('/');
+        router.replace('/setup_profile'); // Changed from /setup_time
     };
 
     const skipOnboarding = async () => {
+        // Mark as completed and skip to home
+        await AsyncStorage.setItem('hasSeenOnboarding', 'true');
+        await AsyncStorage.setItem('setupComplete', 'true');
         // @ts-ignore
         router.replace('/');
     };
@@ -32,6 +34,7 @@ export default function OnboardingScreen() {
 
                 <Text style={styles.subtitle}>Welcome to</Text>
                 <Text style={styles.title}>SOMNUS</Text>
+                <Text style={styles.catch_phrase}>Improve your sleep without wearables</Text>
 
                 <ThemedButton
                     title="Sign in or create an account"
@@ -63,11 +66,16 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 28,
         fontWeight: 'bold',
-        marginBottom: 40,
+        marginBottom: 20,
     },
     subtitle: {
         fontSize: 16,
         marginBottom: 10,
+        textAlign: 'center',
+    },
+    catch_phrase: {
+        fontSize: 12,
+        marginBottom: 40,
         textAlign: 'center',
     },
     skipLink: {
