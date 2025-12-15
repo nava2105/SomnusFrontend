@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import HeaderText from '@/components/HeaderText';
 import AnalogClock from '@/components/AnalogClock';
 import { UserTimeSetting } from '@/types';
-import api from '@/services/api';
+import { sendUserSettings } from '@/services/api';
 
 export default function SetupWakeupScreen() {
     const { colors } = useTheme();
@@ -30,31 +30,26 @@ export default function SetupWakeupScreen() {
 
             await AsyncStorage.setItem('userSettings', JSON.stringify(settings));
 
-            // Send to backend with error handling
-            try {
-                console.log('Sending settings to backend:', settings);
-                const response = await api.post('/api/user/settings', {
-                    username: profile.username,
-                    bedtime: {
-                        hour: existingSettings.bedtime.hour,
-                        minute: existingSettings.bedtime.minute,
-                        isPM: existingSettings.bedtime.isPM
-                    },
-                    wakeup_time: {
-                        hour: wakeUpTime.hour,
-                        minute: wakeUpTime.minute,
-                        isPM: wakeUpTime.isPM
-                    }
-                });
-                console.log('Settings saved successfully:', response.data);
-            } catch (error: any) {
-                console.error('Failed to send settings to backend:', error.message);
-                alert(`Failed to connect to backend. Make sure you're using the correct IP address. Error: ${error.message}`);
-            }
+            // Send to backend
+            const response = await sendUserSettings({
+                username: profile.username,
+                bedtime: {
+                    hour: existingSettings.bedtime.hour,
+                    minute: existingSettings.bedtime.minute,
+                    isPM: existingSettings.bedtime.isPM
+                },
+                wakeup_time: {
+                    hour: wakeUpTime.hour,
+                    minute: wakeUpTime.minute,
+                    isPM: wakeUpTime.isPM
+                }
+            });
+            console.log('Settings saved successfully:', response);
 
             router.replace('/setup_permissions');
-        } catch (error) {
-            console.error('Error saving wake-up time:', error);
+        } catch (error: any) {
+            console.error('Failed to send settings to backend:', error.message);
+            alert(`Failed to connect to backend. Make sure you're using the correct IP address. Error: ${error.message}`);
             router.replace('/setup_permissions');
         }
     };

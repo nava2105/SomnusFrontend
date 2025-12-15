@@ -2,21 +2,57 @@
  * Night graph tab screen showing detailed sleep pattern
  */
 
-import { StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, ActivityIndicator, Text } from 'react-native';
 import { View } from '@/components/Themed';
 import NightGraph from '@/components/NightGraph';
-import { nightGraphData, nightGraphEvents } from '@/constants/Data';
-import BodyActionLink from "@/components/BodyActionLink";
-import React from "react";
-import IconTextRow from "@/components/IconTextRow";
-import Colors from "@/constants/Colors";
-import HeaderText from "@/components/HeaderText";
+import BodyActionLink from '@/components/BodyActionLink';
+import IconTextRow from '@/components/IconTextRow';
+import Colors from '@/constants/Colors';
+import HeaderText from '@/components/HeaderText';
+import { fetchNightPattern } from '@/services/api';
+import { useTheme } from '@/hooks/useTheme';
 
 export default function TabThreeScreen() {
+    const { colors } = useTheme();
+    const [nightData, setNightData] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        loadNightPattern();
+    }, []);
+
+    const loadNightPattern = async () => {
+        try {
+            setLoading(true);
+            const data = await fetchNightPattern();
+            setNightData(data);
+        } catch (error) {
+            console.error('Error loading night pattern:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (loading) {
+        return (
+            <View style={[styles.screenContainer, { justifyContent: 'center', alignItems: 'center' }]}>
+                <ActivityIndicator size="large" color={colors.tint} />
+            </View>
+        );
+    }
+
+    if (!nightData) {
+        return (
+            <View style={styles.screenContainer}>
+                <Text style={{ color: colors.text }}>Failed to load data</Text>
+            </View>
+        );
+    }
+
     return (
         <View style={styles.screenContainer}>
-            <HeaderText text={"Night graph"} />
-            {/* This wrapper centers everything as a block */}
+            <HeaderText text="Night graph" />
             <View style={styles.centeredBlock}>
                 <View style={styles.editTagsWrapper}>
                     <BodyActionLink
@@ -28,8 +64,8 @@ export default function TabThreeScreen() {
                 </View>
 
                 <NightGraph
-                    data={nightGraphData}
-                    events={nightGraphEvents}
+                    data={nightData.points}
+                    events={nightData.events}
                 />
 
                 <View style={styles.labelContainer}>

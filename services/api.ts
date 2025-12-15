@@ -1,6 +1,13 @@
 // services/api.ts
 import axios from 'axios';
 import { API_CONFIG } from '@/config';
+import {
+    DayData,
+    MonthlyDayData,
+    NightGraphPoint,
+    NightGraphEvent,
+    Recommendation
+} from '@/types';
 
 // Log the actual URL being used for debugging
 if (API_CONFIG.DEBUG) {
@@ -64,8 +71,74 @@ export const testConnection = async () => {
     }
 };
 
-// Get recommendations from backend
-export const fetchRecommendations = async () => {
+// Sleep data endpoints
+export const fetchWeeklyData = async (): Promise<DayData[]> => {
+    try {
+        console.log('Fetching weekly sleep data...');
+        const response = await api.get('/api/sleep/weekly-data');
+        return response.data;
+    } catch (error: any) {
+        console.error('Failed to fetch weekly data:', error.message);
+        throw error;
+    }
+};
+
+export const fetchMonthlyData = async (): Promise<MonthlyDayData[]> => {
+    try {
+        console.log('Fetching monthly sleep data...');
+        const response = await api.get('/api/sleep/monthly-data');
+        return response.data;
+    } catch (error: any) {
+        console.error('Failed to fetch monthly data:', error.message);
+        throw error;
+    }
+};
+
+export const fetchSleepDistribution = async (): Promise<{
+    awake: number;
+    pickups: number;
+    asleep: number;
+}> => {
+    try {
+        console.log('Fetching sleep distribution data...');
+        const response = await api.get('/api/sleep/sleep-distribution');
+        return response.data;
+    } catch (error: any) {
+        console.error('Failed to fetch sleep distribution:', error.message);
+        throw error;
+    }
+};
+
+export const fetchSleepScore = async (): Promise<{
+    score: number;
+    label: string;
+}> => {
+    try {
+        console.log('Fetching sleep score...');
+        const response = await api.get('/api/sleep/score');
+        return response.data;
+    } catch (error: any) {
+        console.error('Failed to fetch sleep score:', error.message);
+        throw error;
+    }
+};
+
+export const fetchNightPattern = async (): Promise<{
+    points: NightGraphPoint[];
+    events: NightGraphEvent[];
+}> => {
+    try {
+        console.log('Fetching night pattern data...');
+        const response = await api.get('/api/sleep/night-pattern');
+        return response.data;
+    } catch (error: any) {
+        console.error('Failed to fetch night pattern:', error.message);
+        throw error;
+    }
+};
+
+// Recommendations endpoints
+export const fetchRecommendations = async (): Promise<Recommendation[]> => {
     try {
         console.log('Fetching recommendations from backend...');
         const response = await api.get('/api/recommendations');
@@ -76,8 +149,12 @@ export const fetchRecommendations = async () => {
     }
 };
 
-// Send pin action to backend
-export const sendPinAction = async (username: string, recommendationId: string, recommendationTitle: string, pinned: boolean) => {
+export const sendPinAction = async (
+    username: string,
+    recommendationId: string,
+    recommendationTitle: string,
+    pinned: boolean
+) => {
     try {
         console.log(`Sending pin action: ${pinned ? 'PIN' : 'UNPIN'} for ${recommendationTitle}`);
         const response = await api.post('/api/user/pin-recommendation', {
@@ -90,6 +167,29 @@ export const sendPinAction = async (username: string, recommendationId: string, 
         return response.data;
     } catch (error: any) {
         console.error('Failed to send pin action:', error.message);
+        throw error;
+    }
+};
+
+// User profile and settings endpoints
+export const sendUserProfile = async (profile: any) => {
+    try {
+        console.log('Sending profile to backend:', profile);
+        const response = await api.post('/api/user/profile', profile);
+        return response.data;
+    } catch (error: any) {
+        console.error('Failed to send profile:', error.message);
+        throw error;
+    }
+};
+
+export const sendUserSettings = async (settings: any) => {
+    try {
+        console.log('Sending settings to backend:', settings);
+        const response = await api.post('/api/user/settings', settings);
+        return response.data;
+    } catch (error: any) {
+        console.error('Failed to send settings:', error.message);
         throw error;
     }
 };

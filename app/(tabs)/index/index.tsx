@@ -2,11 +2,11 @@
  * Main home screen displaying sleep score and weekly overview
  */
 
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import { View } from '@/components/Themed';
 import ArcChart from "@/components/ArcChart";
 import Colors from "@/constants/Colors";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import IconTextRow from "@/components/IconTextRow";
 import ScoreDisplay from "@/components/ScoreDisplay";
 import {useColorScheme} from "@/components/useColorScheme";
@@ -15,19 +15,54 @@ import SleepStartButton from '@/components/SleepStartButton';
 import BarChart from "@/components/BarChart";
 import HeaderText from '@/components/HeaderText';
 import { router } from 'expo-router';
-
-const weeklyData = [
-    { day: 'Sun', asleep: 40, awake: 58, pickups: 2 },
-    { day: 'Mon', asleep: 25, awake: 67, pickups: 8 },
-    { day: 'Tue', asleep: 35, awake: 60, pickups: 5 },
-    { day: 'Wed', asleep: 33, awake: 53, pickups: 14 },
-    { day: 'Thu', asleep: 21, awake: 78, pickups: 1 },
-    { day: 'Fri', asleep: 50, awake: 46, pickups: 4 },
-    { day: 'Sat', asleep: 35, awake: 62, pickups: 3 },
-];
+import { fetchWeeklyData, fetchSleepDistribution, fetchSleepScore } from '@/services/api';
+import { ChartSection } from '@/types';
 
 export default function TabOneScreen() {
     const colorScheme = useColorScheme();
+    const [weeklyData, setWeeklyData] = useState<any[]>([]);
+    const [sleepDistribution, setSleepDistribution] = useState<{awake: number, pickups: number, asleep: number} | null>(null);
+    const [sleepScore, setSleepScore] = useState<{score: number, label: string} | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        loadData();
+    }, []);
+
+    const loadData = async () => {
+        try {
+            setLoading(true);
+            const [weekly, distribution, score] = await Promise.all([
+                fetchWeeklyData(),
+                fetchSleepDistribution(),
+                fetchSleepScore()
+            ]);
+
+            setWeeklyData(weekly);
+            setSleepDistribution(distribution);
+            setSleepScore(score);
+        } catch (error) {
+            console.error('Error loading data:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (loading) {
+        return (
+            <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].background }]}>
+                <ActivityIndicator size="large" color={Colors[colorScheme ?? 'light'].tint} />
+            </View>
+        );
+    }
+
+    // Convert distribution data to ChartSection format with colors
+    const chartSections: ChartSection[] = sleepDistribution ? [
+        { value: sleepDistribution.awake, color: Colors.awakeColor, label: 'Awake' },
+        { value: sleepDistribution.pickups, color: Colors.pickupColor, label: 'Pickups' },
+        { value: sleepDistribution.asleep, color: Colors.asleepColor, label: 'Asleep' },
+    ] : [];
+
     return (
         <View style={styles.container}>
             <HeaderText text={"Home"} />
@@ -39,25 +74,22 @@ export default function TabOneScreen() {
             />
             <View style={styles.chartContainer}>
                 <ArcChart
-                    sections={[
-                        { value: 60, color: Colors.awakeColor },
-                        { value: 5, color: Colors.pickupColor },
-                        { value: 35, color: Colors.asleepColor },
-                    ]}
+                    sections={chartSections}
                     size={350}
                     strokeWidth={40}
                     holeSize={0.9}
                 />
-                <ScoreDisplay
-                    score={85}
-                    label="Night Score"
-                    size={50}
-                    color={Colors[colorScheme ?? 'light'].secondaryText}
-                />
+                {sleepScore && (
+                    <ScoreDisplay
+                        score={sleepScore.score}
+                        label={sleepScore.label}
+                        size={50}
+                        color={Colors[colorScheme ?? 'light'].secondaryText}
+                    />
+                )}
             </View>
             <IconTextRow
                 iconName="bed"
-                // iconName="moon-o"        Possible change of icon
                 text="Hours of sleep"
                 color={Colors.asleepColor}
             />
