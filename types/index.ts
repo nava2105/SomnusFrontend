@@ -37,9 +37,9 @@ export interface Recommendation {
     /** Title of the recommendation */
     title: string;
     /** Brief explanation shown by default */
-    briefExplanation: string;
+    brief_explanation: string;
     /** Detailed explanation shown when "Why?" is expanded */
-    detailedExplanation: string;
+    detailed_explanation: string;
 }
 
 export interface NightGraphPoint {

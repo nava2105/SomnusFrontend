@@ -10,11 +10,11 @@ export default {
     light: {
         text: '#000000',
         secondaryText: '#565656',
-        background: '#ffffff',
+        background: '#CAF0F8',
         tint: tintColorLight,
         tabIconDefault: '#565656',
         tabIconSelected: tintColorLight,
-        cardBackground: '#D5D5D5',
+        cardBackground: '#90E0EF',
     },
     dark: {
         text: '#ffffff',

@@ -11,6 +11,11 @@ import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useColorScheme } from '@/components/useColorScheme';
+import { testConnection } from '@/services/api';
+
+useEffect(() => {
+    testConnection();
+}, []);
 
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();

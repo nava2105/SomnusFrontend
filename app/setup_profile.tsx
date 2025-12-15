@@ -8,6 +8,7 @@ import HeaderText from '@/components/HeaderText';
 import { FontAwesome } from '@expo/vector-icons';
 import { View as ThemedView } from '@/components/Themed';
 import { UserProfile } from '@/types';
+import api from '@/services/api';
 
 // List of available avatars - Add your avatar file names here
 // Place your avatar images in assets/avatar/ folder
@@ -91,7 +92,24 @@ export default function SetupProfileScreen() {
             avatar: `avatar${selectedAvatar + 1}.png`
         };
 
+        // Save locally
         await AsyncStorage.setItem('userProfile', JSON.stringify(profile));
+
+        // Send to backend with error handling
+        try {
+            console.log('Sending profile to backend:', profile);
+            const response = await api.post('/api/user/profile', {
+                username: profile.username,
+                profile_picture: profile.avatar,
+                age: profile.age,
+                birth_date: profile.birthDate
+            });
+            console.log('Profile saved successfully:', response.data);
+        } catch (error: any) {
+            console.error('Failed to send profile to backend:', error.message);
+            alert(`Failed to connect to backend. Make sure you're using the correct IP address. Error: ${error.message}`);
+        }
+
         router.replace('/setup_time');
     };
 

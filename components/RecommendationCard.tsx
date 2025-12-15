@@ -1,13 +1,12 @@
-/**
- * Individual recommendation card with expandable "Why?" section and pin/favorite feature
- */
-
-import React, { useState } from 'react';
+// components/RecommendationCard.tsx
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import { Text } from '@/components/Themed';
 import { useTheme } from '@/hooks/useTheme';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Recommendation } from '@/types';
+import { sendPinAction } from '@/services/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Props {
     recommendation: Recommendation;
@@ -16,18 +15,51 @@ interface Props {
 export default function RecommendationCard({ recommendation }: Props) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isPinned, setIsPinned] = useState(false);
+    const [username, setUsername] = useState<string>('');
     const { colors } = useTheme();
+
+    // Load username when component mounts
+    useEffect(() => {
+        loadUsername();
+    }, []);
+
+    const loadUsername = async () => {
+        try {
+            const profileString = await AsyncStorage.getItem('userProfile');
+            if (profileString) {
+                const profile = JSON.parse(profileString);
+                setUsername(profile.username || 'unknown_user');
+            }
+        } catch (error) {
+            console.error('Error loading username:', error);
+        }
+    };
 
     const toggleExpanded = () => {
         setIsExpanded(!isExpanded);
     };
 
-    const togglePinned = () => {
+    const togglePinned = async () => {
         const newPinnedState = !isPinned;
         setIsPinned(newPinnedState);
 
-        // Log to console when a recommendation is pinned/unpinned
-        console.log(`[Recommendation ${recommendation.id}] "${recommendation.title}" - Pinned: ${newPinnedState}`);
+        // Send pin action to backend
+        try {
+            if (username) {
+                await sendPinAction(
+                    username,
+                    recommendation.id,
+                    recommendation.title,
+                    newPinnedState
+                );
+            } else {
+                console.warn('Username not available for pin action');
+            }
+        } catch (error) {
+            console.error('Failed to send pin action:', error);
+            // Revert state if API call fails
+            setIsPinned(!newPinnedState);
+        }
     };
 
     return (
@@ -56,7 +88,7 @@ export default function RecommendationCard({ recommendation }: Props) {
             </View>
 
             <Text style={[styles.brief, { color: colors.secondaryText }]}>
-                {recommendation.briefExplanation}
+                {recommendation.brief_explanation}
             </Text>
 
             <Pressable
@@ -76,7 +108,7 @@ export default function RecommendationCard({ recommendation }: Props) {
 
             {isExpanded && (
                 <Text style={[styles.detailed, { color: colors.secondaryText }]}>
-                    {recommendation.detailedExplanation}
+                    {recommendation.detailed_explanation}
                 </Text>
             )}
         </View>

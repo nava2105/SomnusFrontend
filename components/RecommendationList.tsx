@@ -1,19 +1,49 @@
-/**
- * Scrollable list of sleep recommendations
- */
-
-import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+// components/RecommendationList.tsx
+import React, { useState, useEffect } from 'react';
+import { ScrollView, StyleSheet, Text } from 'react-native';
 import { View } from '@/components/Themed';
 import RecommendationCard from './RecommendationCard';
-import { recommendationsData } from '@/constants/Data';
+import { fetchRecommendations } from '@/services/api';
+import { Recommendation } from '@/types';
+import { useTheme } from '@/hooks/useTheme';
 
 export default function RecommendationList() {
+    const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+    const [loading, setLoading] = useState(true);
+    const { colors } = useTheme();
+
+    useEffect(() => {
+        loadRecommendations();
+    }, []);
+
+    const loadRecommendations = async () => {
+        try {
+            const data = await fetchRecommendations();
+            setRecommendations(data);
+        } catch (error) {
+            console.error('Error loading recommendations:', error);
+            // Fallback to empty array or local data if needed
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (loading) {
+        return (
+            <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+                <Text style={{ color: colors.text }}>Loading recommendations...</Text>
+            </View>
+        );
+    }
+
     return (
         <ScrollView style={styles.container}>
             <View style={styles.content}>
-                {recommendationsData.map((rec) => (
-                    <RecommendationCard key={rec.id} recommendation={rec} />
+                {recommendations.map((rec) => (
+                    <RecommendationCard
+                        key={rec.id}
+                        recommendation={rec}
+                    />
                 ))}
             </View>
         </ScrollView>
