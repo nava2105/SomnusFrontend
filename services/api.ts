@@ -194,4 +194,16 @@ export const sendUserSettings = async (settings: any) => {
     }
 };
 
+export const sendSleepSessionData = async (sessionData: any) => {
+    try {
+        console.log('Sending sleep session data...');
+        const response = await api.post('/api/sleep/session', sessionData);
+        console.log('Session data saved:', response.data);
+        return response.data;
+    } catch (error: any) {
+        console.error('Failed to send session data:', error.message);
+        throw error;
+    }
+};
+
 export default api;
