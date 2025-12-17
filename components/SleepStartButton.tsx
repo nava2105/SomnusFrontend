@@ -82,7 +82,7 @@ export default function SleepStartButton({ size = 80 }: SleepStartButtonProps) {
 
                 const recording = new Audio.Recording();
                 await recording.prepareToRecordAsync(
-                    Audio.RecordingOptionsPresets.HIGH_QUALITY
+                    Audio.RecordingOptionsPresets.LOW_QUALITY
                 );
                 await recording.startAsync();
                 recordingRef.current = recording;
