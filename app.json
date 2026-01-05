@@ -22,7 +22,8 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.n4v4.SomnusFrontend"
     },
     "web": {
       "bundler": "metro",
@@ -34,6 +35,11 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9a42b0b1-0fa1-4a75-8cff-459b0fa65e10"
+      }
     }
   }
 }

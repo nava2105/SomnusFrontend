@@ -12,10 +12,7 @@ import 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useColorScheme } from '@/components/useColorScheme';
 import { testConnection } from '@/services/api';
-
-useEffect(() => {
-    testConnection();
-}, []);
+import { usePhoneInactivityTracker } from '@/hooks/usePhoneInactivityTracker';
 
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
@@ -23,6 +20,11 @@ SplashScreen.preventAutoHideAsync();
 const ONBOARDING_KEY = 'hasSeenOnboarding';
 
 export default function RootLayout() {
+    useEffect(() => {
+        testConnection();
+    }, []);
+
+    usePhoneInactivityTracker();
     const [fontsLoaded, fontError] = useFonts({
         SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
         ...FontAwesome.font,
